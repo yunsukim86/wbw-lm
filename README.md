@@ -7,6 +7,8 @@ If you use this code, please cite:
 - Yunsu Kim, Jiahui Geng and Hermann Ney. [Improving Unsupervised Word-by-Word Translation Using Language Model and Denoising Autoencoder](https://www-i6.informatik.rwth-aachen.de/publications/download/1075/Kim-EMNLP-2018.pdf). EMNLP 2018.
 - Alexis Conneau, Guillaume Lample, Marc'Aurelio Ranzato, Ludovic Denoyer and Hervé Jégou. [Word Translation Without Parallel Data](https://arxiv.org/pdf/1710.04087.pdf). arXiv preprint.
 
+If you are looking for the denoising autoencoder, please go to [sockeye-noise](https://github.com/yunsukim86/sockeye-noise).
+
 
 ### Installation
 
