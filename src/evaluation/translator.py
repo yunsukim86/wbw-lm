@@ -85,7 +85,7 @@ class Translator(object):
 
             topk = scores.topk(self.params.topk, 1, True)
             topk_scores = topk[0].cpu().numpy()[0]
-            topk_tgt_ids = topk[1]
+            topk_tgt_ids = topk[1][0]
 
             # scaling of similarity scores
             if self.params.emb_scaling == 'linear':
@@ -97,20 +97,19 @@ class Translator(object):
 
             # convert from ids to words
             topk_tgt_words = []
-            for id_list in topk_tgt_ids:
-                for i in id_list:
-                    tgt_word = self.tgt_dico.id2word[i]
-                    if tgt_word not in CATEGORY_LABELS and tgt_word != EOS_TOKEN:
-                        topk_tgt_words.append(tgt_word)
+            topk_tgt_scores = []
+
+            for i in range(len(topk_tgt_ids)):
+                tgt_word = self.tgt_dico.id2word[topk_tgt_ids[i]]
+                if tgt_word not in CATEGORY_LABELS and tgt_word != EOS_TOKEN:
+                    topk_tgt_words.append(tgt_word)
+                    topk_tgt_scores.append(topk_scores[i])
 
             if len(topk_tgt_words) == 0:
                 topk_tgt_words = [src_word]
-                topk_scores = [PROB_DEFAULT]
+                topk_tgt_scores = [PROB_DEFAULT]
 
-            print(src_word)
-            print(topk_scores)
-
-            return topk_tgt_words, topk_scores
+            return topk_tgt_words, topk_tgt_scores
 
     def sent_translation(self, sent, lm):
         beam = [[list(), 0.0]]
