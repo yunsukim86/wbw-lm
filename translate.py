@@ -10,7 +10,6 @@
 
 
 import argparse
-import logging
 import os
 import sys
 
@@ -94,15 +93,12 @@ if __name__=='__main__':
     assert os.path.isfile(params.src_emb)
     assert os.path.isfile(params.tgt_emb)
 
-    # logger
-    logger = logging.getLogger('translate.py')  # CHECK: random seeding necessary?
-
     # load input (to translate)
-    logger.info("loading input data...")
+    print("loading input data...")
     input_sents = load_input(params.input, params.input_lowercase)  # CHECK: vocab?
 
     # load embeddings
-    logger.info("loading embeddings...")
+    print("loading embeddings...")
     src_dico, _src_emb = load_embeddings(params, source=True)  # 'dico' = word2id mappings
     src_emb = nn.Embedding(len(src_dico), params.emb_dim, sparse=True)
     src_emb.weight.data.copy_(_src_emb)
@@ -116,17 +112,17 @@ if __name__=='__main__':
         tgt_emb.cuda()
 
     # normalize embeddings
-    logger.info("normalizing embeddings...")
+    print("normalizing embeddings...")
     params.src_mean = normalize_embeddings(src_emb.weight.data, params.normalize_embeddings)
     params.tgt_mean = normalize_embeddings(tgt_emb.weight.data, params.normalize_embeddings)
     
     # load lm
     lm = None
     if params.lm is not None:
-        logger.info("loading LM...")
+        print("loading LM...")
         lm = kenlm.LanguageModel(params.lm)
 
     # translate
-    logger.info("translating...")
+    print("translating...")
     translator = Translator(src_emb, tgt_emb, src_dico, tgt_dico, params)
     translator.corpus_translation(input_sents, lm)

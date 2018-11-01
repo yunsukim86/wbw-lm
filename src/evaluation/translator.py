@@ -9,7 +9,6 @@
 #
 
 
-from logging import getLogger
 from math import exp, log
 import os
 
@@ -17,8 +16,6 @@ import numpy as np
 import torch
 
 from ..utils import get_nn_avg_dist
-
-logger = getLogger('src/evaluation/translator.py')
 
 
 # constants
@@ -151,4 +148,4 @@ class Translator(object):
         with open(output_path, 'w') as output_file:
             for trs in translations:
                 output_file.write("%s\n" % ' '.join(trs))
-        logger.info('Writing translations to %s ...' % output_path)
+        print('Writing translations to %s ...' % output_path)
