@@ -94,11 +94,11 @@ if __name__=='__main__':
     assert os.path.isfile(params.tgt_emb)
 
     # load input (to translate)
-    print("loading input data...")
+    print("loading input data...", file=sys.stderr)
     input_sents = load_input(params.input, params.input_lowercase)  # CHECK: vocab?
 
     # load embeddings
-    print("loading embeddings...")
+    print("loading embeddings...", file=sys.stderr)
     src_dico, _src_emb = load_embeddings(params, source=True)  # 'dico' = word2id mappings
     src_emb = nn.Embedding(len(src_dico), params.emb_dim, sparse=True)
     src_emb.weight.data.copy_(_src_emb)
@@ -112,17 +112,17 @@ if __name__=='__main__':
         tgt_emb.cuda()
 
     # normalize embeddings
-    print("normalizing embeddings...")
+    print("normalizing embeddings...", file=sys.stderr)
     params.src_mean = normalize_embeddings(src_emb.weight.data, params.normalize_embeddings)
     params.tgt_mean = normalize_embeddings(tgt_emb.weight.data, params.normalize_embeddings)
     
     # load lm
     lm = None
     if params.lm is not None:
-        print("loading LM...")
+        print("loading LM...", file=sys.stderr)
         lm = kenlm.LanguageModel(params.lm)
 
     # translate
-    print("translating...")
+    print("translating...", file=sys.stderr)
     translator = Translator(src_emb, tgt_emb, src_dico, tgt_dico, params)
     translator.corpus_translation(input_sents, lm)

@@ -11,6 +11,7 @@
 
 from math import exp, log
 import os
+import sys
 
 import numpy as np
 import torch
@@ -144,8 +145,14 @@ class Translator(object):
             trs = self.sent_translation(sent, lm)
             translations.append(trs)
 
-        output_path = os.path.join(self.params.output)
-        with open(output_path, 'w') as output_file:
-            for trs in translations:
-                output_file.write("%s\n" % ' '.join(trs))
-        print('Writing translations to %s ...' % output_path)
+        if self.params.output:
+            output_path = os.path.join(self.params.output)
+            output_file = open(output_path, 'w')
+        else:
+            output_path = 'stdout'
+            output_file = sys.stdout
+        print('Writing translations to %s ...' % output_path, file=sys.stderr)
+        for trs in translations:
+            output_file.write("%s\n" % ' '.join(trs))
+        if output_file is not sys.stdout:
+            output_file.close()
